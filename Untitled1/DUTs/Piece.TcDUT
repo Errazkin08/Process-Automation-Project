@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="Piece" Id="{32f55e54-c2ac-45bb-ac40-9cdf7148aa5c}">
+    <Declaration><![CDATA[TYPE Piece :
+STRUCT
+	Id: INT := -1;
+	Recipe: INT; // == Number of pushes
+	Processed: INT := 0; 
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

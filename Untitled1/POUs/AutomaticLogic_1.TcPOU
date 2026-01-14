@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="AutomaticLogic_1" Id="{4cb8fbca-d5f6-4ba6-89b1-66d5dda03017}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM AutomaticLogic_1
+VAR
+	Compressor1: Compressor;
+	Tracking1: TrackingLogic;
+	AutoCtrl: AutomationControl_1;
+	Id_counter: CTU;
+	Sensor1_FTrig: F_TRIG;
+	lastP_trig: R_TRIG;
+	limit1_trig: R_TRIG;
+	
+	activate: BOOL;
+	vert_p: Vertical_process;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//AutoCtrl(piston1for := FALSE, piston1back := FALSE, piston2for := FALSE, piston2back := FALSE, pistonVert := FALSE, motorCon := FALSE, motorRotate := FALSE);
+AutoCtrl();
+Compressor1(switch:= GVL.Switch);
+Tracking1();
+Sensor1_FTrig(CLK:= GVL.Sensor1);
+Id_counter();
+lastP_trig(CLK := GVL.Sensor2);
+Id_counter.CU := Sensor1_FTrig.Q;
+limit1_trig(CLK:= GVL.Limit1);
+
+vert_p(activate:= activate);
+
+
+IF GVL.Switch = FALSE THEN
+	
+	//Init of Pieces
+	IF Sensor1_FTrig.Q = TRUE THEN
+		GVL.Position[0].Piece.Id := TO_INT(Id_counter.CV);
+		GVL.Position[0].Piece.Recipe := 1;
+		GVL.Position[0].Occupied := TRUE;
+	END_IF
+	
+	// pushing from position 0
+	IF (NOT GVL.Position[1].Occupied AND NOT AutoCtrl.motorRotate AND GVL.Position[0].Occupied) THEN
+	AutoCtrl.piston1back := FALSE;	
+	AutoCtrl.piston1for := TRUE;
+		IF (GVL.Sensor1) THEN
+			AutoCtrl.piston1for := FALSE;
+			AutoCtrl.piston1back := TRUE;
+			GVL.Position[0].Done := TRUE;
+		END_IF
+	END_IF
+
+	// rotating table
+	IF ((GVL.Position[1].Occupied AND NOT GVL.Position[2].Occupied AND NOT GVL.Position[3].Occupied) OR (NOT GVL.Position[1].Occupied AND (GVL.Position[2].Occupied AND GVL.Position[2].Processed) AND NOT GVL.Position[3].Occupied) OR (GVL.Position[1].Occupied AND (GVL.Position[2].Occupied AND GVL.Position[2].Processed) AND NOT GVL.Position[3].Occupied)) THEN
+		AutoCtrl.motorRotate := TRUE;
+		IF (GVL.Position[1].Occupied AND NOT GVL.Position[2].Occupied AND NOT GVL.Position[3].Occupied) THEN
+			IF (GVL.Limit1) THEN
+				AutoCtrl.motorRotate := FALSE;
+				GVL.Position[1].Done := TRUE;
+			END_IF	
+		END_IF
+		IF (NOT GVL.Position[1].Occupied AND (GVL.Position[2].Occupied AND GVL.Position[2].Processed)) THEN
+			IF (GVL.Limit2) THEN
+				AutoCtrl.motorRotate := FALSE;
+				GVL.Position[2].Done := TRUE;
+			END_IF
+		END_IF
+		IF (GVL.Position[1].Occupied AND (GVL.Position[2].Occupied AND GVL.Position[2].Processed) AND NOT GVL.Position[3].Occupied) THEN
+			IF (GVL.Limit2) THEN
+				AutoCtrl.motorRotate := FALSE;
+				GVL.Position[2].Done := TRUE;
+				IF (NOT GVL.Position[2].Done) THEN
+					GVL.Position[1].Done := TRUE;
+				END_IF
+			END_IF
+		END_IF
+		
+	END_IF
+	
+	// processing
+	IF (GVL.Position[2].Occupied AND NOT GVL.Position[2].Processed) THEN
+		IF (GVL.Position[2].Piece.Processed <= GVL.Position[2].Piece.Id + 1) THEN
+			activate := TRUE;
+			IF (vert_p.done) THEN
+				//GVL.Position[2].Piece.Processed := GVL.Position[2].Piece.Processed + 1;
+				activate := FALSE;
+				IF (GVL.Position[2].Piece.Processed >= GVL.Position[2].Piece.Id +1) THEN
+					GVL.Position[2].Processed := TRUE;
+					//GVL.Position[2].Done := TRUE;
+				END_IF
+			END_IF
+		END_IF
+	END_IF
+	
+	// Piston 2
+	IF (GVL.Position[3].Occupied AND NOT GVL.Position[4].Occupied) THEN
+		
+		AutoCtrl.piston2for := FALSE;
+		AutoCtrl.piston2back := TRUE;	
+		IF (NOT GVL.Limit2) THEN
+			AutoCtrl.piston2back := FALSE;
+			AutoCtrl.piston2for := TRUE;
+			GVL.Position[3].Done := TRUE;
+		END_IF
+	END_IF
+	
+	// motorCon
+	IF (GVL.Position[4].Occupied AND NOT GVL.Position[5].Occupied) THEN
+		AutoCtrl.motorCon := TRUE;
+		IF (NOT GVL.Sensor2) THEN
+			AutoCtrl.motorCon := FALSE;
+			GVL.Position[4].Done := TRUE;
+		END_IF
+	END_IF
+	
+	// LaSt position
+	IF (lastP_trig.Q) THEN
+		GVL.Position[5].Done := TRUE;
+	END_IF
+
+	
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="AutomaticLogic_1">
+      <LineId Id="53" Count="0" />
+      <LineId Id="235" Count="0" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="113" Count="0" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="247" Count="0" />
+      <LineId Id="385" Count="0" />
+      <LineId Id="389" Count="0" />
+      <LineId Id="406" Count="0" />
+      <LineId Id="482" Count="0" />
+      <LineId Id="481" Count="0" />
+      <LineId Id="394" Count="0" />
+      <LineId Id="233" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="122" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="133" Count="1" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="249" Count="0" />
+      <LineId Id="515" Count="8" />
+      <LineId Id="514" Count="0" />
+      <LineId Id="274" Count="0" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="275" Count="0" />
+      <LineId Id="331" Count="0" />
+      <LineId Id="443" Count="1" />
+      <LineId Id="448" Count="1" />
+      <LineId Id="447" Count="0" />
+      <LineId Id="465" Count="0" />
+      <LineId Id="464" Count="0" />
+      <LineId Id="453" Count="1" />
+      <LineId Id="456" Count="0" />
+      <LineId Id="455" Count="0" />
+      <LineId Id="452" Count="0" />
+      <LineId Id="463" Count="0" />
+      <LineId Id="459" Count="2" />
+      <LineId Id="528" Count="0" />
+      <LineId Id="526" Count="0" />
+      <LineId Id="529" Count="0" />
+      <LineId Id="458" Count="0" />
+      <LineId Id="466" Count="0" />
+      <LineId Id="457" Count="0" />
+      <LineId Id="277" Count="0" />
+      <LineId Id="243" Count="0" />
+      <LineId Id="290" Count="1" />
+      <LineId Id="480" Count="0" />
+      <LineId Id="495" Count="3" />
+      <LineId Id="500" Count="1" />
+      <LineId Id="524" Count="0" />
+      <LineId Id="502" Count="0" />
+      <LineId Id="493" Count="1" />
+      <LineId Id="294" Count="0" />
+      <LineId Id="292" Count="0" />
+      <LineId Id="300" Count="0" />
+      <LineId Id="359" Count="0" />
+      <LineId Id="361" Count="0" />
+      <LineId Id="387" Count="0" />
+      <LineId Id="386" Count="0" />
+      <LineId Id="363" Count="0" />
+      <LineId Id="366" Count="0" />
+      <LineId Id="388" Count="0" />
+      <LineId Id="368" Count="0" />
+      <LineId Id="365" Count="0" />
+      <LineId Id="362" Count="0" />
+      <LineId Id="244" Count="2" />
+      <LineId Id="372" Count="2" />
+      <LineId Id="377" Count="0" />
+      <LineId Id="375" Count="0" />
+      <LineId Id="371" Count="0" />
+      <LineId Id="378" Count="4" />
+      <LineId Id="370" Count="0" />
+      <LineId Id="369" Count="0" />
+      <LineId Id="240" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

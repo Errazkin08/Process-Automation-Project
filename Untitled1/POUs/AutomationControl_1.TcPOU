@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="AutomationControl_1" Id="{e7b10cb8-bfcc-4411-a441-ce2ad54738ab}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK AutomationControl_1
+VAR_INPUT
+	piston1for: BOOL;
+	piston1back: BOOL;
+	
+	piston2for: BOOL;
+	piston2back: BOOL;
+	
+	pistonVert: BOOL;
+	
+	motorRotate: BOOL;
+	
+	motorCon: BOOL;
+	
+END_VAR
+VAR
+	sleeping1: sleep;
+	sleeping2: sleep;
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//Piston1
+GVL.Piston1For := piston1for;
+GVL.Piston1Back := piston1back;
+
+//Piston2
+GVL.Piston2For := piston2for;
+GVL.Piston2Back := piston2back;
+
+GVL.PistonVert := pistonVert;
+
+GVL.MotorCon := motorCon;
+
+GVL.MotorRotate := motorRotate;]]></ST>
+    </Implementation>
+    <LineIds Name="AutomationControl_1">
+      <LineId Id="102" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="249" Count="1" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="252" Count="0" />
+      <LineId Id="251" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="254" Count="0" />
+      <LineId Id="253" Count="0" />
+      <LineId Id="256" Count="0" />
+      <LineId Id="255" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

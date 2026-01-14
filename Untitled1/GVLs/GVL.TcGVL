@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="GVL" Id="{5158ea22-3602-4922-a10c-c6c9da37cd27}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	Switch AT %I* : BOOL;
+	LEDRed AT %Q* : BOOL;
+	GrnBtn AT %I* : BOOL;
+	LEDGreen AT %Q* : BOOL;
+	RedBtn AT %I* : BOOL;
+	LedBlueTop AT %Q* : BOOL;
+	
+	Compressor AT %Q* :BOOL; 
+	Piston1For AT %Q* :BOOL := FALSE;
+	Piston1Back AT %Q* :BOOL := FALSE;
+	PistonVert AT %Q* :BOOL;
+	MotorRotate AT %Q* :BOOL;
+	Piston2For AT %Q* :BOOL;
+	Piston2Back AT %Q* :BOOL;
+	MotorCon AT %Q* :BOOL;
+	
+	BlackTopL AT %I* :BOOL;
+	BlackTopR AT %I* :BOOL;
+	BlackBottomL AT %I* :BOOL;
+	BlackBottomR AT %I* :BOOL;
+	
+	Sensor1 AT %I* :BOOL;
+	Limit1 AT %I* :BOOL;
+	Limit2 AT %I* :BOOL;
+	Sensor2 AT %I* :BOOL;
+	
+	Position : ARRAY [0..5] OF Location;
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

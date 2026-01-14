@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="TrackingLogic" Id="{e099012d-54a4-4c6c-bcf9-8781338d3583}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK TrackingLogic
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+IF GVL.Position[0].Occupied  THEN
+	IF GVL.Position[0].Done THEN
+		GVL.Position[0].Done := FALSE;
+		GVL.Position[1].Piece := GVL.Position[0].Piece;
+		GVL.Position[1].Occupied := TRUE;
+		GVL.Position[0].Occupied := FALSE;
+		GVL.Position[1].Done := FALSE;
+	END_IF
+END_IF
+
+IF GVL.Position[1].Occupied  THEN
+	IF GVL.Position[1].Done THEN
+		GVL.Position[1].Done := FALSE;
+		GVL.Position[2].Piece := GVL.Position[1].Piece;
+		GVL.Position[2].Occupied := TRUE;
+		GVL.Position[1].Occupied := FALSE;
+		GVL.Position[2].Done := FALSE;
+		GVL.Position[2].Processed := FALSE;
+	END_IF
+END_IF
+
+IF GVL.Position[2].Occupied  THEN
+	IF GVL.Position[2].Done THEN
+		//GVL.Position[2].Processed := FALSE;
+		GVL.Position[3].Done := FALSE;
+		GVL.Position[2].Occupied := FALSE;
+		GVL.Position[3].Piece := GVL.Position[2].Piece;
+		GVL.Position[3].Occupied := TRUE;
+		GVL.Position[2].Done := FALSE;
+	END_IF
+END_IF
+
+IF GVL.Position[3].Occupied  THEN
+	IF GVL.Position[3].Done THEN
+		GVL.Position[3].Done := FALSE;
+		GVL.Position[4].Piece := GVL.Position[3].Piece;
+		GVL.Position[4].Occupied := TRUE;
+		GVL.Position[3].Occupied := FALSE;
+		GVL.Position[4].Done := FALSE;
+	END_IF
+END_IF
+
+IF GVL.Position[4].Occupied  THEN
+	IF GVL.Position[4].Done THEN
+		GVL.Position[4].Done := FALSE;
+		GVL.Position[5].Piece := GVL.Position[4].Piece;
+		GVL.Position[5].Occupied := TRUE;
+		GVL.Position[4].Occupied := FALSE;
+		GVL.Position[5].Done := FALSE;
+	END_IF
+END_IF
+
+IF GVL.Position[5].Occupied  THEN
+	IF GVL.Position[5].Done THEN
+		GVL.Position[5].Done := FALSE;
+		GVL.Position[5].Occupied := FALSE;
+	END_IF
+END_IF]]></ST>
+    </Implementation>
+    <LineIds Name="TrackingLogic">
+      <LineId Id="75" Count="0" />
+      <LineId Id="11" Count="2" />
+      <LineId Id="54" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="67" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="20" Count="2" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="97" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="27" Count="2" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="79" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="41" Count="2" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="48" Count="2" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="52" Count="1" />
+      <LineId Id="47" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="Compressor" Id="{cc4b9394-775e-43e2-b106-a8314d92dfa9}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK Compressor
+VAR_INPUT
+	switch: BOOL;
+	
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	R_TRIG_0: R_TRIG;
+	R_TRIG0: BOOL;
+	R_TRIG_1: R_TRIG;
+	R_TRIG1: BOOL;
+	R_TRIG_2: R_TRIG;
+	R_TRIG2: BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+R_TRIG_0(CLK := GVL.GrnBtn, Q=> R_TRIG0);
+R_TRIG_1(CLK := GVL.REDBtn, Q=> R_TRIG1);
+R_TRIG_2(CLK := GVL.Switch, Q=> R_TRIG2);
+
+IF R_TRIG2 = TRUE THEN
+	GVL.Compressor := FALSE;
+END_IF
+
+
+IF switch = FALSE THEN
+	GVL.Compressor := TRUE;
+ELSE
+
+	IF  R_TRIG0 = TRUE THEN
+		GVL.Compressor := TRUE;
+	END_IF
+	IF  R_TRIG1 = TRUE THEN
+		GVL.Compressor := FALSE;
+	END_IF 
+	
+END_IF;
+
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="Compressor">
+      <LineId Id="35" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="46" Count="1" />
+      <LineId Id="32" Count="1" />
+      <LineId Id="11" Count="4" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
